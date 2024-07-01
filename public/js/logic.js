@@ -25,7 +25,7 @@ function getColor(i) {
     else if (red.includes(i) || redPath.includes(i)){ return "red" }
     else if (yellow.includes(i) || yellowPath.includes(i)){ return "yellow" }
     else if (blue.includes(i) || bluePath.includes(i)){ return "blue" }
-    else if (black.includes(i)) { return"black" }
+    else if (black.includes(i)) { return"violet" }
     else {return "white"}   
 }
 
