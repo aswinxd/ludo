@@ -24,7 +24,8 @@ bot.onText(/\/create/, (msg) => {
     const chatId = msg.chat.id;
     const roomId = `room-${Date.now()}`;
     rooms[roomId] = { players: [], spectators: [] };
-    bot.sendMessage(chatId, `Room created! Room ID: ${roomId}`);
+    const webAppUrl = `http://your-server-ip:3000/game/${roomId}`;
+    bot.sendMessage(chatId, `Room created! Room ID: ${roomId}\nJoin the game: ${webAppUrl}`);
 });
 
 bot.onText(/\/join (.+)/, (msg, match) => {
