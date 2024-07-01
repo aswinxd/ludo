@@ -1,42 +1,78 @@
-var express = require('express');
-// var fortune = require('./lib/fortune.js')
-var app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const TelegramBot = require('node-telegram-bot-api');
+
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const bot = new TelegramBot(config.telegramBotToken, { polling: true });
+
+const app = express();
+app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3000);
 
-// set up handlebars view engine
-// Default layout is main as defined in /views/layouts/main.handlebars
-var handlebars = require('express-handlebars').create({ defaultLayout:'main' });
+// Set up handlebars view engine
+const handlebars = require('express-handlebars').create({ defaultLayout: 'main' });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
-let user = "User"
-
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
-    res.render('login'); 
+let rooms = {};
+
+// Telegram bot commands
+bot.onText(/\/create/, (msg) => {
+    const chatId = msg.chat.id;
+    const roomId = `room-${Date.now()}`;
+    rooms[roomId] = { players: [], spectators: [] };
+    bot.sendMessage(chatId, `Room created! Room ID: ${roomId}`);
 });
-app.get('/home', function(req, res) {
-    res.render('home', {user: user}); 
+
+bot.onText(/\/join (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const roomId = match[1];
+    if (rooms[roomId]) {
+        if (rooms[roomId].players.length < 4) {
+            rooms[roomId].players.push(chatId);
+            bot.sendMessage(chatId, `You joined room ${roomId} as a player!`);
+        } else {
+            rooms[roomId].spectators.push(chatId);
+            bot.sendMessage(chatId, `You joined room ${roomId} as a spectator!`);
+        }
+    } else {
+        bot.sendMessage(chatId, `Room ${roomId} does not exist.`);
+    }
 });
-app.get('/game', function(req, res){
-    res.render('game');
+
+app.get('/', (req, res) => {
+    res.render('login');
+});
+
+app.get('/home', (req, res) => {
+    res.render('home', { user: 'User' });
+});
+
+app.get('/game/:roomId', (req, res) => {
+    const roomId = req.params.roomId;
+    if (rooms[roomId]) {
+        res.render('game', { roomId: roomId });
+    } else {
+        res.status(404).render('404');
+    }
 });
 
 // 404 catch-all handler (middleware)
-app.use(function(req, res, next){
+app.use((req, res, next) => {
     res.status(404);
     res.render('404');
 });
+
 // 500 error handler (middleware)
-app.use(function(err, req, res, next){
+app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(err.status ||500);
+    res.status(err.status || 500);
     res.render('500');
 });
 
-app.listen(app.get('port'), function(){
-    console.log( 'Express started on http://localhost:' +
-    app.get('port') + '; press Ctrl-C to terminate.' );
+app.listen(app.get('port'), () => {
+    console.log(`Express started on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
 });
-
