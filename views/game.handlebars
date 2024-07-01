@@ -1,12 +1,36 @@
-<div class="game">
+<html>
+<head>
+    <title>Ludo Game - Room {{roomId}}</title>
+    <style>
+        .invite {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function copyToClipboard() {
+            const link = document.getElementById("roomLink").innerText;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('Room link copied to clipboard!');
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="game">
+        <div class="board" id="board"></div>
+        <div class="dice" id="dice"></div>
+    </div>
 
-    <div class="board" id="board"></div>
-    <div class="dice" id="dice"></div>
+    <div class="invite">
+        <p>Invite your friends using this link:</p>
+        <p id="roomLink">http://your-server-ip:3000/game/{{roomId}}</p>
+        <button onclick="copyToClipboard()">Copy Link</button>
+    </div>
 
-</div>
+    <!-- View layer -->
+    <script src="../js/view.js"></script>
 
-<!-- View layer -->
-<script src = "../js/view.js"></script>
-
-<!-- Logic layer -->
-<script src = "../js/logic.js" ></script>
+    <!-- Logic layer -->
+    <script src="../js/logic.js"></script>
+</body>
+</html>
