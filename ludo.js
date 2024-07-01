@@ -24,7 +24,7 @@ bot.onText(/\/create/, (msg) => {
     const chatId = msg.chat.id;
     const roomId = `room-${Date.now()}`;
     rooms[roomId] = { players: [], spectators: [] };
-    const webAppUrl = `http://your-server-ip:3000/game/${roomId}`;
+    const webAppUrl = `http://63.142.249.127:3000/game/${roomId}`;
     bot.sendMessage(chatId, `Room created! Room ID: ${roomId}\nJoin the game: ${webAppUrl}`);
 });
 
@@ -75,5 +75,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(app.get('port'), () => {
-    console.log(`Express started on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
+    console.log(`Express started on http://63.142.249.127:${app.get('port')}; press Ctrl-C to terminate.`);
 });
