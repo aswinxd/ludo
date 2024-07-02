@@ -4,24 +4,34 @@
     <meta charset="UTF-8">
     <title>Ludo Game - Room {{roomId}}</title>
     <style>
-        .game {
+        body {
+            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
+            flex-direction: column;
             padding: 20px;
         }
 
+        .game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         .board {
-            width: 60%;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             background-color: #f0f0f0;
             border: 2px solid #ccc;
+            position: relative;
         }
 
         .dice {
-            width: 100px;
-            height: 100px;
-            margin-top: 20px;
+            width: 150px;
+            height: 150px;
+            margin-top: 20px; /* Moved below the board */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,9 +43,7 @@
         }
 
         .invite {
-            margin-top: 40px;
             text-align: center;
-            font-family: Arial, sans-serif;
         }
 
         .invite p {
@@ -62,6 +70,25 @@
             font-size: 20px;
             color: green;
         }
+
+        .players {
+            display: flex;
+            justify-content: space-between;
+            width: 600px;
+            margin-top: 10px;
+        }
+
+        .player {
+            width: 100px;
+            text-align: center;
+        }
+
+        .current-turn {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -77,6 +104,20 @@
 
             const dice = document.getElementById("dice");
             const diceResult = document.getElementById("diceResult");
+            const currentTurnDisplay = document.getElementById("currentTurn");
+            const players = ["Player 1", "Player 2", "Player 3", "Player 4"];
+            let currentPlayer = 0;
+
+            function updateCurrentTurn() {
+                currentTurnDisplay.innerText = `${players[currentPlayer]}'s Turn`;
+                currentTurnDisplay.style.color = getPlayerColor(currentPlayer);
+            }
+
+            function getPlayerColor(playerIndex) {
+                const colors = ["red", "green", "yellow", "blue"];
+                return colors[playerIndex];
+            }
+
             dice.addEventListener("click", rollDice);
 
             function rollDice() {
@@ -87,8 +128,14 @@
                     const diceValue = Math.floor(Math.random() * 6);
                     dice.innerHTML = `<img src="public/img/D${diceValue}.PNG" alt="Dice ${diceValue + 1}">`;
                     diceResult.innerText = `The dice shows: ${diceValue + 1}`;
+                    
+                    // Move to next player
+                    currentPlayer = (currentPlayer + 1) % players.length;
+                    updateCurrentTurn();
                 }, 1000); // Roll for 1 second before showing result
             }
+
+            updateCurrentTurn(); // Initialize the current turn display
         });
     </script>
 </head>
@@ -98,9 +145,16 @@
         <div class="dice" id="dice">
             <img src="public/img/D0.PNG" alt="Dice">
         </div>
+        <div class="dice-result" id="diceResult">The dice shows: 1</div>
+        <div class="current-turn" id="currentTurn"></div>
     </div>
 
-    <div class="dice-result" id="diceResult">The dice shows: 1</div>
+    <div class="players">
+        <div class="player" style="color: red;">Player 1</div>
+        <div class="player" style="color: green;">Player 2</div>
+        <div class="player" style="color: yellow;">Player 3</div>
+        <div class="player" style="color: blue;">Player 4</div>
+    </div>
 
     <div class="invite">
         <p>Invite your friends using this link:</p>
