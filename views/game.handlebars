@@ -28,6 +28,17 @@
             position: relative;
         }
 
+        .player {
+            position: absolute;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .player1 { top: 50px; left: 50px; color: red; }
+        .player2 { top: 50px; right: 50px; color: green; }
+        .player3 { bottom: 50px; left: 50px; color: yellow; }
+        .player4 { bottom: 50px; right: 50px; color: blue; }
+
         .dice {
             width: 150px;
             height: 150px;
@@ -69,18 +80,6 @@
             margin-top: 10px;
             font-size: 20px;
             color: green;
-        }
-
-        .players {
-            display: flex;
-            justify-content: space-between;
-            width: 600px;
-            margin-top: 10px;
-        }
-
-        .player {
-            width: 100px;
-            text-align: center;
         }
 
         .current-turn {
@@ -141,19 +140,17 @@
 </head>
 <body>
     <div class="game">
-        <div class="board" id="board"></div>
+        <div class="board" id="board">
+            <div class="player player1">Player 1</div>
+            <div class="player player2">Player 2</div>
+            <div class="player player3">Player 3</div>
+            <div class="player player4">Player 4</div>
+        </div>
         <div class="dice" id="dice">
             <img src="public/img/D0.PNG" alt="Dice">
         </div>
         <div class="dice-result" id="diceResult">The dice shows: 1</div>
         <div class="current-turn" id="currentTurn"></div>
-    </div>
-
-    <div class="players">
-        <div class="player" style="color: red;">Player 1</div>
-        <div class="player" style="color: green;">Player 2</div>
-        <div class="player" style="color: yellow;">Player 3</div>
-        <div class="player" style="color: blue;">Player 4</div>
     </div>
 
     <div class="invite">
