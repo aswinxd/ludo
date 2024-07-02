@@ -84,9 +84,9 @@
                 diceResult.innerText = "Rolling...";
 
                 setTimeout(() => {
-                    const diceValue = Math.floor(Math.random() * 6) + 1;
-                    dice.innerHTML = `<img src="public/img/D${diceValue}.PNG" alt="Dice ${diceValue}">`;
-                    diceResult.innerText = `The dice shows: ${diceValue}`;
+                    const diceValue = Math.floor(Math.random() * 6);
+                    dice.innerHTML = `<img src="public/img/D${diceValue}.PNG" alt="Dice ${diceValue + 1}">`;
+                    diceResult.innerText = `The dice shows: ${diceValue + 1}`;
                 }, 1000); // Roll for 1 second before showing result
             }
         });
