@@ -1,32 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<html>
 <head>
-    <title>Ludo Game - Room {{roomId}}</title>
+    <meta charset="UTF-8">
+    <title>Ludo Game - Room</title>
     <style>
-        .invite {
+        .game {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .board {
+            width: 60%;
+            height: 500px;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+        }
+
+        .dice {
+            width: 100px;
+            height: 100px;
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dice img {
+            width: 100%;
+            height: auto;
+        }
+
+        .invite {
+            margin-top: 40px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .invite p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .invite button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .invite button:hover {
+            background-color: #45a049;
+        }
+
+        .dice-result {
+            margin-top: 10px;
+            font-size: 20px;
+            color: green;
         }
     </style>
     <script>
-        function copyToClipboard() {
-            const link = document.getElementById("roomLink").innerText;
-            navigator.clipboard.writeText(link).then(() => {
-                alert('Room link copied to clipboard!');
+        document.addEventListener('DOMContentLoaded', () => {
+            const roomId = '12345'; // Replace this with your dynamic roomId logic
+            const roomLink = `http://63.142.249.127:3000/game/${roomId}`;
+            document.getElementById("roomLink").innerText = roomLink;
+
+            document.getElementById("copyButton").addEventListener("click", () => {
+                navigator.clipboard.writeText(roomLink).then(() => {
+                    alert('Room link copied to clipboard!');
+                });
             });
-        }
+
+            const dice = document.getElementById("dice");
+            const diceResult = document.getElementById("diceResult");
+            dice.addEventListener("click", rollDice);
+
+            function rollDice() {
+                dice.innerHTML = `<img src="images/dice-roll.gif" alt="Rolling dice">`; // Show rolling GIF
+                diceResult.innerText = `Rolling...`;
+
+                setTimeout(() => {
+                    const diceValue = Math.floor(Math.random() * 6) + 1;
+                    dice.innerHTML = `<img src="images/dice${diceValue}.png" alt="Dice ${diceValue}">`;
+                    diceResult.innerText = `The dice shows: ${diceValue}`;
+                }, 1000); // Roll for 1 second before showing result
+            }
+        });
     </script>
 </head>
 <body>
     <div class="game">
         <div class="board" id="board"></div>
-        <div class="dice" id="dice"></div>
+        <div class="dice" id="dice">
+            <img src="img/dice1.png" alt="Dice 1">
+        </div>
     </div>
+
+    <div class="dice-result" id="diceResult">The dice shows: 1</div>
 
     <div class="invite">
         <p>Invite your friends using this link:</p>
-        <p id="roomLink">http://63.142.249.127:3000/game/{{roomId}}</p>
-        <button onclick="copyToClipboard()">Copy Link</button>
+        <p id="roomLink"></p>
+        <button id="copyButton">Copy Link</button>
     </div>
 
     <!-- View layer -->
